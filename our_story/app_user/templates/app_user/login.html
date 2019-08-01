@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block title %}<title>Login In</title>{% endblock %}
+
+{% block content %}
+<span class="h2 d-block mt-5 mb-2">Log In</span>
+<div>
+    <p class="alert alert-primary text-center">{{ message }}</p>
+</div>
+<div class="border rounded p-3">
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" class="form-control" id="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" id="password">
+        </div>
+        <input type="submit" class="form-control cursor-pointer bg-login" value="Log In">
+    </form>
+</div>
+
+{% load staticfiles %}
+<script src="{% static 'js/user.js' %}"></script>
+{% endblock %}

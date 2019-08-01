@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% block title %}<title>Welcome to Our Story</title>{% endblock %}
+
+{% block signup %}
+<div class="ml-auto col-lg-5 border p-3">
+    <form action="{% url 'app_user:register' %}" id="register" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="lastName">Name</label>
+            <div class="d-flex">
+                <input id="lastName" type="text" class="form-control" name="lname" placeholder="ex) 홍">
+                <input id="firstName" type="text" class="form-control" name="fname" placeholder="ex) 길동">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-group">
+                <input id="username" type="text" class="form-control" name="username" placeholder="Username">
+                <div class="input-group-append">
+                    <button type="button" class="btn" id="check-username"><i class="fa fa-user"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Set your Password</label>
+            <div class="input-group">
+                <input id="password" type="password" class="form-control" name="password" placeholder="length: 8 over, contain : alphabet, number, special symbol">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="check-password"><i class="fa"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password2">Confirm your Password</label>
+            <div class="input-group">
+                <input id="password2" type="password" class="form-control" name="password" placeholder="length: 8 over, contain : alphabet, number, special symbol">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="check-password2"><i class="fa"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Address</label>
+            <input id="address" type="text" class="form-control" name="address" placeholder="ex) 경기 용인, 경기도 용인시 처인구 등">
+        </div>
+
+        <div class="form-group">
+            <label for="birth">Birth</label>
+            <input id="birth" type="date" class="form-control" name="birth">
+        </div>
+
+        <div class="form-group">
+            <label>Sex</label>
+            <div class="d-flex">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input id="male" type="radio" name="sex" value="Male">
+                        </div>
+                    </div>
+                    <label for="male" class="form-control bg-white text-center">Male</label>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input id="female" type="radio" name="sex" value="Female">
+                        </div>
+                    </div>
+                    <label for="female" class="form-control bg-white text-center">Female</label>
+                </div>
+            </div>
+        </div>
+        <input type="submit" class="form-control pointer-cursor" value="Sign Up">
+    </form>
+</div>
+
+{% load staticfiles %}
+<script src="{% static 'js/user.js' %}"></script>
+<script src="{% static 'js/password.js' %}"></script>
+{% endblock %}

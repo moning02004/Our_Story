@@ -1,0 +1,5 @@
+.pointer-cursor{cursor: pointer;}
+.pointer-default{cursor: default;}
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-inner-spin-button {
+ }

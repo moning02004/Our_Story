@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block top-nav %}
+    <nav class="navbar navbar-expand-lg border-bottom bg-dark">
+    {% if user.is_authenticated %}
+        <a class="nav-link text-white" href="{% url 'app_main:index' %}">Dashboard</a>
+        <form action="#" method="get">
+            <div class="input-group">
+                <input type="search" class="form-control" name="search_friend">
+                <div class="input-group-append">
+                    <button class="btn"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </form>
+        <a class="nav-link text-white ml-auto border rounded mx-1" href="#">
+        {% if user.noticebox.notice_set.all %}
+            <i class="fa fa-envelope-open"></i> {{ user.messagebox.message_set.all|length }}
+        {% else %}
+            <i class="fa fa-envelope"></i>
+        {% endif %}
+        </a>
+        <div class="dropdown">
+            <button class="py-auto btn btn-outline-secondary dropdown-toggle" role="button" data-toggle="dropdown">
+                <i class="fa fa-user"></i> <span class="text-white">{{ user.profile.get_name }}</span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#">Chatting</a>
+                <a class="dropdown-item" href="#">Friend</a>
+                <a class="dropdown-item" href="#">My Profile</a>
+                <a class="dropdown-item pointer-cursor" id="logout">Log Out</a>
+            </div>
+        </div>
+        {% else %}
+        <a class="nav-link text-white" href="{% url 'app_main:index' %}">Home</a>
+        <a class="nav-link ml-auto text-white" href="{% url 'app_user:login' %}">Log In</a>
+        {% endif %}
+    </nav>
+    {% if not user.is_authenticated %}
+        {% block signup %}{% endblock %}
+    {% endif %}
+
+<script>
+    $(function() {
+        $('#logout').click(function() {
+            $.ajax({
+                url: '/user/logout/',
+                method: 'POST',
+                success: function(data) {
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
