@@ -1,5 +1,41 @@
-.pointer-cursor{cursor: pointer;}
-.pointer-default{cursor: default;}
-input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="date"]::-webkit-inner-spin-button {
+.cursor-pointer{cursor: pointer;}
+.cursor-default{cursor: default;}
+.user-name{
+    border-bottom: 1px solid black;
+    text-shadow: 2px 2px 0.5rem white;
+}
+.user-name:hover{
+    border-bottom: 1px solid blue;
+    text-shadow: 2px 2px 2rem blue;
+}
+a:hover{
+    text-decoration: none;
+}
+.bg-main {background-color: rgba(100, 228, 100, 0.9);}
+.bg-main-2 {background-color: rgba(100, 228, 100, 0.5);}
+.text-main {color: rgba(100, 228, 100, 0.8);}
+.borderless {border: 0px;}
+
+.textarea-box {
+    padding: 0.8rem;
+    resize: none;
+}
+.content-box{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    height: inherit;
+}
+.content-box-wrap{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: inherit;
+}
+.pre-box {
+    font-size: 1rem;
+    line-height: 2rem;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-all;
  }

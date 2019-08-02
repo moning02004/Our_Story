@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block title %}<title>{{ user.profile.get_name }}님 반갑습니다.</title>{% endblock %}
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-header p-2 bg-main-2 rounded">{{ post.author.profile.get_name }} 님의 게시글입니다. <span class="float-right">2019-08-02</span></div>
+    <div class="card-body pre-box">{{ post.content }}</div>
+    <div class="card-footer p-2">
+         <span class="mx-1 cursor-pointer">
+            <span id="pk" hidden>{{ post.id }}</span>
+            {% if user in post.heart_list %}
+            <i class="fas fa-heart text-danger"></i>
+            {% else %}
+            <i class="far fa-heart"></i>
+            {% endif %}
+            <sup> {{ post.heart.all|length }}</sup>
+        </span>
+        <span class="mx-1"><i class="far fa-comment"></i><sup> {{ post.comment.all|length }}</sup></span>
+        <div class="float-right">
+            {% if user.is_authenticated %}
+            <span class="mx-3 btn-remove cursor-pointer"><i class="far fa-trash-alt"></i></span>
+            {% endif %}
+            <a href="{% url 'app_dashboard:index' %}" class="mx-1 text-dark"><i class="fas fa-undo"></i></a>
+        </div>
+    </div>
+</div>
+<div><hr></div>
+<div class="input-group mb-4">
+    <input type="text" class="form-control" name="content" placeholder="댓글을 입력해주세요.">
+    <div class="input-group-append">
+        <button class="input-group-text cursor-pointer btn-comment">작성</button>
+    </div>
+</div>
+
+<div id="comment-field">
+    {% for comment in post.comment_set.all reversed %}
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <a href="#" class="input-group-text" title="프로필 보러가기">{{ comment.author.profile.get_name }}</a>
+        </div>
+        <div class="form-control content-box-wrap">{{ comment.content }}<span class="float-right">{{ comment.created|date:'Y-m-d H:i' }}</span></div>
+    </div>
+    {% endfor %}
+</div>
+
+<div id="comment-layout" hidden>
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <a href="#" class="input-group-text" title="프로필 보러가기" id="author"></a>
+        </div>
+        <div class="form-control content-box-wrap"><span id="content"></span><span class="float-right" id="created"></span></div>
+    </div>
+</div>
+
+{% load staticfiles %}
+<script src="{% static 'js/post.js' %}"></script>
+{% endblock %}
