@@ -1,18 +1,18 @@
 .cursor-pointer{cursor: pointer;}
 .cursor-default{cursor: default;}
 .user-name{
-    border-bottom: 1px solid black;
+    color: black;
     text-shadow: 2px 2px 0.5rem white;
 }
 .user-name:hover{
-    border-bottom: 1px solid blue;
+    border-bottom: 1px blue;
     text-shadow: 2px 2px 2rem blue;
 }
 a:hover{
     text-decoration: none;
 }
-.bg-main {background-color: rgba(100, 228, 100, 0.9);}
-.bg-main-2 {background-color: rgba(100, 228, 100, 0.5);}
+.bg-main {background-color: rgb(17, 122, 101);}
+.bg-main-2 {background-color: rgba(17, 122, 101, 0.5);}
 .text-main {color: rgba(100, 228, 100, 0.8);}
 .borderless {border: 0px;}
 
@@ -39,3 +39,36 @@ a:hover{
     white-space: -o-pre-wrap;
     word-wrap: break-all;
  }
+
+.profile-picture {
+    width: 70px;
+    height: 70px;
+}
+
+.friend-list {
+    width: 50%;
+    margin: auto;
+}
+.post-list {
+    width: 70%;
+    margin: auto;
+}
+#btn-search{
+    background: none;
+    display: none;
+}
+#search-bar{
+    display: inline;
+}
+@media only screen and (max-width: 720px) {
+    .friend-list, .post-list {
+        width: 100%;
+    }
+    #search-bar{
+        display: none;
+    }
+    #btn-search {
+        display: inline-block;
+    }
+
+}

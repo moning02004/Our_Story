@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+{% block title %}<title>{{ user_ }}'s 프로필</title>{% endblock %}
+
+{% block content %}
+<div class="border rounded p-3 mx-auto friend-list">
+    <div class="d-flex rounded p-2 border-bottom">
+        <img src="{% static 'assets/basic.png' %}" class="profile-picture">
+        <div class="my-auto w-100 pl-3">
+            <span>{{user_.profile.get_name}} ({{ user_.profile.sex }})<br>{{ user_.profile.birth }}</span>
+            <span><br>{{ user_.profile.address }}</span>
+        </div>
+        {% if user == user_ %}
+        <button class="btn my-auto ml-auto">수정</button>
+        {% endif %}
+    </div>
+</div>
+
+<div class="mt-3 border rounded p-3 friend-list">
+    <span>친구 목록 ({{ user_.profile.friend.all |length }})</span>
+    <hr class="mt-0">
+    <p class="text-center"><a href="{% url 'app_friend:recommend' %}">다음</a>을 눌러 친구를 찾아보세요</p>
+    {% for x in user_.profile.friend.all %}
+    <div class="border-bottom">
+        <div class="d-flex rounded p-2">
+            <img src="{% static 'assets/basic.png' %}" class="profile-picture">
+            <div class="my-auto w-100 pl-3"><a href="{% url 'app_user:profile' x.user.username%}" class="user-name">{{ x.get_name }} ({{ x.sex }})<br>{{ x.birth }}</a></div>
+            {% if x.user != user %}
+                {% if not x in user.profile.friend.all %}
+                <button class="btn my-auto ml-auto btn-add" value="{{ x.user.username }}">친구 신청</button>
+                {% elif  x in user.profile.friend.all %}
+                <button class="btn my-auto ml-auto btn-release" value="{{ x.user.username }}">친구 해제</button>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script src="{% static 'js/friend.js' %}"></script>
+
+{% endblock %}

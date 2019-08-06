@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'app_main',
     'app_dashboard',
     'app_post',
+    'app_friend',
 ]
 
 MIDDLEWARE = [
@@ -111,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -125,3 +126,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/file/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'file')

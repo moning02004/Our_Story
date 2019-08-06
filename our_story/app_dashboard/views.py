@@ -14,5 +14,4 @@ def index(request):
     for x in request.user.profile.friend.all():
         query.add(Q(author=x.user), query.OR)
     post_list = Post.objects.filter(query).order_by('created')
-    print([x.heart.all() for x in post_list])
     return render(request, 'app_dashboard/index.html', {'post_list': reversed(post_list)})

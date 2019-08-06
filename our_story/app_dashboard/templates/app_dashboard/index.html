@@ -5,7 +5,7 @@
 {% block content %}
 <form action="{% url 'app_post:new' %}" method="post">
     {% csrf_token %}
-    <div class="">
+    <div class="post-list">
         <div class="card-header p-2 bg-main-2 rounded">{{ user.profile.get_name }} 님! 글을 작성해보세요~</div>
         <div class="input-group">
             <textarea class="form-control textarea-box" name="content"></textarea>
@@ -15,10 +15,10 @@
         </div>
     </div>
 </form>
-<div><hr></div>
+<div class="post-list"><hr></div>
 {% for post in post_list %}
-<div class="card mb-5">
-    <div class="card-header p-2 bg-main-2 rounded"><a href="#" class="text-dark user-name">{{ post.author.profile.get_name }} </a>님의 게시글입니다.</div>
+<div class="card mb-5 post-list">
+    <div class="card-header p-2 bg-main-2 rounded"><a href="{% url 'app_user:profile' post.author.username %}" class="text-dark user-name">{{ post.author.profile.get_name }} </a>님의 게시글입니다.</div>
     <a href="{% url 'app_post:detail' post.id %}" class="card-body cursor-pointer content-box text-dark">{{ post.content }}</a>
     <div class="card-footer p-1">
         <span class="mx-1 cursor-pointer heart">

@@ -2,6 +2,10 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+def file_path(instance, filename):
+    return 'profile_picture/{}/{}'.format(instance.user.username, filename)
+
+
 class Address(models.Model):
     keyword = models.CharField(max_length=100)
 
@@ -11,10 +15,12 @@ class Address(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to=file_path)
     friend = models.ManyToManyField('self')
     birth = models.CharField(max_length=12, default='')
     sex = models.CharField(max_length=10)
-    address = models.ManyToManyField(Address)
+    address = models.CharField(max_length=100)
+    address_keywords = models.ManyToManyField(Address)
 
     # 더 추가될 수 있음
 

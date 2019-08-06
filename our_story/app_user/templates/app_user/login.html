@@ -3,11 +3,11 @@
 {% block title %}<title>Login In</title>{% endblock %}
 
 {% block content %}
-<span class="h2 d-block mt-5 mb-2">Log In</span>
-<div>
+<span class="h2 d-block mt-5 mb-2 post-list">Log In</span>
+<div class="post-list">
     <p class="alert alert-primary text-center">{{ message }}</p>
 </div>
-<div class="border rounded p-3">
+<div class="border rounded p-3 post-list">
     <form action="" method="post">
         {% csrf_token %}
         <div class="form-group">

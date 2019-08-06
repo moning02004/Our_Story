@@ -1,45 +1,49 @@
 {% extends 'base.html' %}
 
 {% block top-nav %}
-    <nav class="navbar navbar-expand-lg border-bottom bg-main">
+<nav class="navbar navbar-expand-lg border-bottom bg-main">
     {% if user.is_authenticated %}
-        <a class="nav-link text-dark" href="{% url 'app_main:index' %}">Dashboard</a>
+    <a class="nav-link text-white" href="{% url 'app_main:index' %}">Dashboard</a>
+    <button class="btn" id="btn-search"><i class="fa fa-search text-white"></i></button>
+    <div id="search-bar">
         <form action="#" method="get">
             <div class="input-group">
-                <input type="search" class="form-control" name="search_friend">
+                <input type="search" class="form-control" name="search_keyword">
                 <div class="input-group-append">
                     <button class="btn"><i class="fa fa-search"></i></button>
                 </div>
             </div>
         </form>
+    </div>
 
-        <a class="p-2 ml-auto rounded btn-outline-white mx-1" href="#">
-        {% if user.noticebox.notice_set.all %}
-            <i class="fa fa-envelope-open text-dark"></i>{{ user.messagebox.message_set.all|length }}
-        {% else %}
-            <i class="fa fa-envelope text-dark"></i>
-        {% endif %}
-        </a>
-
-        <div class="dropdown">
-            <button class="btn btn-outline-secondary dropdown-toggle borderless" role="button" data-toggle="dropdown">
-                <i class="fa fa-user text-dark"></i><span class="text-dark"></span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">Chatting</a>
-                <a class="dropdown-item" href="#">Friend</a>
-                <a class="dropdown-item" href="#">My Profile</a>
-                <a class="dropdown-item pointer-cursor" id="logout">Log Out</a>
-            </div>
-        </div>
-        {% else %}
-        <a class="nav-link text-dark" href="{% url 'app_main:index' %}">Home</a>
-        <a class="nav-link ml-auto text-dark" href="{% url 'app_user:login' %}">Log In</a>
-        {% endif %}
-    </nav>
-    {% if not user.is_authenticated %}
-        {% block signup %}{% endblock %}
+    <a class="p-2 ml-auto rounded btn-outline-white mx-1" href="#">
+    {% if user.noticebox.notice_set.all %}
+        <i class="fa fa-envelope-open text-white"></i>{{ user.messagebox.message_set.all|length }}
+    {% else %}
+        <i class="fa fa-envelope text-white"></i>
     {% endif %}
+    </a>
+
+    <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle borderless" role="button" data-toggle="dropdown">
+            <i class="fa fa-user text-white"></i><span class="text-white"> {{ user.profile.get_name }}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'app_user:profile' user.username %}">내 정보</a>
+            <a class="dropdown-item" href="{% url 'app_friend:recommend' %}">친구 추천</a>
+            <a class="dropdown-item" href="#">대화 목록</a>
+            <a class="dropdown-item pointer-cursor" id="logout">Log Out</a>
+        </div>
+    </div>
+    {% else %}
+    <a class="nav-link text-white" href="{% url 'app_main:index' %}">Home</a>
+    <a class="nav-link ml-auto text-white" href="{% url 'app_user:login' %}">Log In</a>
+    {% endif %}
+</nav>
+<div id="search-field" class="mx-3 mt-1"></div>
+{% if not user.is_authenticated %}
+    {% block signup %}{% endblock %}
+{% endif %}
 
 <script>
     $(function() {
@@ -48,9 +52,17 @@
                 url: '/user/logout/',
                 method: 'POST',
                 success: function(data) {
-                    location.reload();
+                    location.replace('/');
                 }
             });
+        });
+
+        $('#btn-search').click(function() {
+            if ($(window).width() >= 1024) return false;
+            var $search_bar = $('div#search-bar');
+            var is_none = ($search_bar.css('display') == 'none') ? 'inline' : 'none';
+            $search_bar.css('display', is_none);
+            $('#search-field').html($search_bar);
         });
     });
 </script>

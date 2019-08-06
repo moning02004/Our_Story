@@ -29,27 +29,30 @@ def register(request):
     if request.user.is_authenticated:
         return render(request, 'app_dashboard/index.html')
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username = request.POST.get('username').strip()
         password = request.POST.get('password')
-        fname = request.POST.get('fname')
-        lname = request.POST.get('lname')
+        fname = request.POST.get('fname').strip()
+        lname = request.POST.get('lname').strip()
         birth = request.POST.get('birth').strip()
-        sex = request.POST.get('sex')
-        address = request.POST.get('address').strip().split(' ')
+        sex = request.POST.get('sex').strip()
+        address = request.POST.get('address').strip()
+        address_keywords = request.POST.get('address').strip().split(' ')
 
         user = User.objects.create_user(username=username, password=password, first_name=fname, last_name=lname)
-        profile = Profile.objects.create(user=user, birth=birth, sex=sex)
+        profile = Profile.objects.create(user=user, birth=birth, sex=sex, address=address)
 
-        for x in address:
+        for x in address_keywords:
             if x == '': continue
             xx = Address.objects.create(keyword=x) if not x in [y.keyword for y in Address.objects.all()] else Address.objects.get(keyword=x)
-            profile.address.add(xx)
+            profile.address_keywords.add(xx)
         return redirect('app_user:login')
     return redirect('app_main:index')
 
 
-def profile(request):
-    return None
+def profile(request, username):
+    if not request.user.is_authenticated:
+        return redirect('app_main:index')
+    return render(request, 'app_user/profile.html', {'user_': User.objects.get(username=username)})
 
 
 def edit(request):

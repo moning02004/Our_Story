@@ -7,7 +7,7 @@
     <div class="card-header p-2 bg-main-2 rounded">{{ post.author.profile.get_name }} 님의 게시글입니다. <span class="float-right">2019-08-02</span></div>
     <div class="card-body pre-box">{{ post.content }}</div>
     <div class="card-footer p-2">
-         <span class="mx-1 cursor-pointer">
+         <span class="mx-1 cursor-pointer heart">
             <span id="pk" hidden>{{ post.id }}</span>
             {% if user in post.heart_list %}
             <i class="fas fa-heart text-danger"></i>
