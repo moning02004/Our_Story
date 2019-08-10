@@ -1,17 +1,17 @@
 {% extends 'layout.html' %}
 {% load staticfiles %}
-{% block title %}<title>{{ user_ }}'s 프로필</title>{% endblock %}
+{% block title %}<title>{{ user_.profile.get_name }}'s 프로필</title>{% endblock %}
 
 {% block content %}
 <div class="border rounded p-3 mx-auto friend-list">
     <div class="d-flex rounded p-2 border-bottom">
-        <img src="{% static 'assets/basic.png' %}" class="profile-picture">
+        <img src="{{ user_.profile.picture.url }}" class="profile-picture rounded">
         <div class="my-auto w-100 pl-3">
             <span>{{user_.profile.get_name}} ({{ user_.profile.sex }})<br>{{ user_.profile.birth }}</span>
             <span><br>{{ user_.profile.address }}</span>
         </div>
         {% if user == user_ %}
-        <button class="btn my-auto ml-auto">수정</button>
+        <a href="{% url 'app_user:edit' %}" class="btn my-auto ml-auto border bg-main text-white">수정</a>
         {% endif %}
     </div>
 </div>
@@ -23,7 +23,7 @@
     {% for x in user_.profile.friend.all %}
     <div class="border-bottom">
         <div class="d-flex rounded p-2">
-            <img src="{% static 'assets/basic.png' %}" class="profile-picture">
+            <img src="{{ x.picture.url }}" class="profile-picture">
             <div class="my-auto w-100 pl-3"><a href="{% url 'app_user:profile' x.user.username%}" class="user-name">{{ x.get_name }} ({{ x.sex }})<br>{{ x.birth }}</a></div>
             {% if x.user != user %}
                 {% if not x in user.profile.friend.all %}

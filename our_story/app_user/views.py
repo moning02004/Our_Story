@@ -1,3 +1,5 @@
+import os
+
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, Http404, HttpRequest
@@ -37,9 +39,10 @@ def register(request):
         sex = request.POST.get('sex').strip()
         address = request.POST.get('address').strip()
         address_keywords = request.POST.get('address').strip().split(' ')
+        picture = '/admin/no_pic.png'
 
         user = User.objects.create_user(username=username, password=password, first_name=fname, last_name=lname)
-        profile = Profile.objects.create(user=user, birth=birth, sex=sex, address=address)
+        profile = Profile.objects.create(user=user, picture=picture, birth=birth, sex=sex, address=address)
 
         for x in address_keywords:
             if x == '': continue
@@ -56,12 +59,46 @@ def profile(request, username):
 
 
 def edit(request):
-    return None
+    if not request.user.is_authenticated:
+        return redirect('app_main:index')
+
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        fname = request.POST.get('fname').strip()
+        lname = request.POST.get('lname').strip()
+        birth = request.POST.get('birth').strip()
+        sex = request.POST.get('sex').strip()
+        address = request.POST.get('address').strip()
+        address_keywords = request.POST.get('address').strip().split(' ')
+
+        user = request.user
+        user.first_name = fname
+        user.last_name = lname
+        user.save()
+
+        print(request.FILES.get('profile-picture'))
+        user.profile.picture.delete()
+        user.profile.picture = request.FILES.get('profile-picture')
+        user.profile.birth = birth
+        user.profile.sex = sex
+        user.profile.address = address
+        user.profile.address_keywords.remove()
+        user.profile.save()
+
+        for x in address_keywords:
+            if x == '': continue
+            xx = Address.objects.create(keyword=x) if not x in [y.keyword for y in
+                                                                Address.objects.all()] else Address.objects.get(
+                keyword=x)
+            user.profile.address_keywords.add(xx)
+        return redirect('app_user:profile', request.user.username)
+    return render(request, 'app_user/edit.html')
 
 
 def check_username(request):
     if request.is_ajax() and request.method == 'POST':
-        message = 'OK' if not User.objects.all().filter(username=request.POST.get('username')).exists() else 'NO'
+        username = request.POST.get('username')
+        message = 'OK' if not User.objects.all().filter(username=username).exists() and username != 'admin' else 'NO'
         return JsonResponse({'message': message})
     raise Http404
 

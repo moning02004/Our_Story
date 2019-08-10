@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -29,3 +31,6 @@ class Profile(models.Model):
 
     def get_name(self):
         return self.user.last_name + self.user.first_name
+
+    def filename(self):
+        return os.path.basename(self.picture.name)
