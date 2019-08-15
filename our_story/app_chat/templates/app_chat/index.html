@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block title %}<title>{{ user.profile.get_name }}'s 대화 목록</title>{% endblock %}
+
+{% block content %}
+<div class="border rounded p-3 friend-list">
+    <span>추천</span>
+    <hr class="mt-0">
+    {% for x in user.profile.friend.all %}
+    <div class="border-bottom">
+        <div class="d-flex rounded p-2">
+            <img src="{{ x.picture.url }}" class="profile-picture">
+            <div class="my-auto w-100 pl-3"><a href="{% url 'app_user:profile' x.user.username %}" class="user-name">{{ x.get_name }} ({{x.sex}})<br>{{ x.birth }}</a></div>
+            <input type="hidden" class="username" value="{{ x.user.username }}" readonly>
+
+            <a class="btn my-auto ml-auto btn-chatting-start border bg-main-2 text-light">1:1 대화</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% load staticfiles %}
+<script src="{% static 'js/chat.js' %}"></script>
+{% endblock %}
+

@@ -1,0 +1,16 @@
+.footer {
+    position: fixed;
+    bottom: 10px;
+    width:100%;
+}
+.top {
+    width: 100%;
+    margin-bottom: 1.2em;
+    position: fixed;
+    top: 0;
+    border-bottom: 0.2em solid black;
+}
+
+#my-layout, #friend-layout {
+    display: none;
+}

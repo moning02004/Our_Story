@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SESSION_COOKIE_AGE = 60 * 20
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
 
 # Application definition
 
@@ -38,12 +41,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # third party
+    'channels',
+
     # local apps
     'app_user',
     'app_main',
     'app_dashboard',
     'app_post',
     'app_friend',
+    'app_chat'
 ]
 
 MIDDLEWARE = [
@@ -74,8 +81,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'our_story.wsgi.application'
-
+# WSGI_APPLICATION = 'our_story.wsgi.application'
+ASGI_APPLICATION = 'our_story.routing.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [('localhost', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -118,7 +133,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

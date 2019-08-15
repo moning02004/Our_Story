@@ -1,5 +1,6 @@
 .cursor-pointer{cursor: pointer;}
 .cursor-default{cursor: default;}
+.height-400px {height: 400px;}
 .user-name{
     color: black;
     text-shadow: 2px 2px 0.5rem white;
@@ -7,6 +8,12 @@
 .user-name:hover{
     border-bottom: 1px blue;
     text-shadow: 2px 2px 2rem blue;
+}
+
+.chat-message{
+    position: fixed;
+    right: 1px;
+    bottom: 10px;
 }
 a:hover{
     text-decoration: none;

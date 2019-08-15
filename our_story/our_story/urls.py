@@ -24,6 +24,7 @@ urlpatterns = [
     path('dashboard/', include('app_dashboard.urls')),
     path('post/', include('app_post.urls')),
     path('friend/', include('app_friend.urls')),
+    path('chat/', include('app_chat.urls')),
     path('admin/', admin.site.urls),
 ]
 if settings.DEBUG:
