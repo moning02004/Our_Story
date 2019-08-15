@@ -10,24 +10,30 @@
 <div class="p-3 mb-5">
     <div id="friend-layout">
         <div class="mb-3"><i class="fa fa-user"></i><span class="get-name">{{ friend }}</span></div>
-        <div class="mb-4"><span class="border rounded p-2 yourMsg">그런게 있다.</span> <small class="my-auto yourtime">2019-08-11 16:11</small></div>
+        <div class="mb-4"><span class="border rounded p-2 yourMsg"></span> <small class="my-auto yourtime"></small></div>
     </div>
     <div id="my-layout">
-        <div class="text-right mb-4"><small class="my-auto mytime">2019-08-11 16:11</small> <span class="border rounded p-2 myMsg">ㅋㅋㅋㅋㅋ</span></div>
+        <div class="text-right mb-4"><small class="unread"></small> <small class="my-auto mytime"></small> <span class="border rounded p-2 myMsg"></span></div>
     </div>
 
     <div class="message-field">
         {% for x in message_list %}
         {% if x.from_user == user %}
-            <div class="text-right mb-4"><small class="my-auto mytime">{{ x.created|date:'Y-m-d H:i' }}</small> <span class="border rounded p-2 myMsg">{{ x.content }}</span></div>
+        <div class="text-right mb-4">
+            {% if x.unread != 0 %}
+            <small class="unread">{{ x.unread }}</small>
+            {% endif %}
+            <small class="my-auto mytime">{{ x.created|date:'H:i' }}</small>
+            <span class="border rounded p-2 myMsg">{{ x.content }}</span>
+        </div>
         {% else %}
             <div class="mb-3"><i class="fa fa-user"></i><span class="get-name">{{ friend }}</span></div>
-            <div class="mb-4"><span class="border rounded p-2 yourMsg">{{ x.content }}</span> <small class="my-auto yourtime">{{ x.created|date:'Y-m-d H:i' }}</small></div>
+            <div class="mb-4"><span class="border rounded p-2 yourMsg">{{ x.content }}</span> <small class="my-auto yourtime">{{ x.created|date:'H:i' }}</small></div>
         {% endif %}
         {% endfor %}
     </div>
-
 </div>
+
 <div class="footer">
     <div class="input-group">
         <input type="text" class="form-control" name="message-content">

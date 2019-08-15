@@ -1,8 +1,8 @@
 $(function() {
     var $document = $(document);
     $document.scrollTop($document.height());
+
     var participant = window.location.pathname.replace('/chat/message/', '');
-    console.log(participant)
     var chat_websocket = new WebSocket('ws://'+ window.location.host+'/chat/'+participant);
 
     // web server 에서 받은 메시지
@@ -11,7 +11,16 @@ $(function() {
         var $friend_layout = $('#friend-layout');
         var data = JSON.parse(e.data);
 
+        console.log(data['q']);
+        if (data['q'] == 'Accept') {
+            if (!data['left'])$('.unread').html('');
+            return false;
+        }
+        console.log(data['created'])
+
         if ($('input[name="username"]').val() === data['from_user']){
+            console.log(data['left'])
+            if (data['left']) $my_layout.find('.unread').html('1');
             $my_layout.find('.mytime').html(data['created']);
             $my_layout.find('.myMsg').html(data['content']);
 

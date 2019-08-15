@@ -67,7 +67,7 @@ a:hover{
 #search-bar{
     display: inline;
 }
-@media only screen and (max-width: 720px) {
+@media only screen and (max-width: 800px) {
     .friend-list, .post-list {
         width: 100%;
     }

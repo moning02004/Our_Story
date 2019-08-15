@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, Http404, HttpRequest
@@ -39,10 +40,9 @@ def register(request):
         sex = request.POST.get('sex').strip()
         address = request.POST.get('address').strip()
         address_keywords = request.POST.get('address').strip().split(' ')
-        picture = '/admin/no_pic.png'
 
         user = User.objects.create_user(username=username, password=password, first_name=fname, last_name=lname)
-        profile = Profile.objects.create(user=user, picture=picture, birth=birth, sex=sex, address=address)
+        profile = Profile.objects.create(user=user, birth=birth, sex=sex, address=address)
 
         for x in address_keywords:
             if x == '': continue
@@ -77,7 +77,7 @@ def edit(request):
         user.save()
 
         print(request.FILES.get('profile-picture'))
-        user.profile.picture.delete()
+        user.profile.picture.delete() if user.profile.picture else None
         user.profile.picture = request.FILES.get('profile-picture')
         user.profile.birth = birth
         user.profile.sex = sex

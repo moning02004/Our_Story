@@ -17,7 +17,7 @@ class Address(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    picture = models.ImageField(upload_to=file_path)
+    picture = models.ImageField(upload_to=file_path, null=True, blank=True)
     friend = models.ManyToManyField('self')
     birth = models.CharField(max_length=12, default='')
     sex = models.CharField(max_length=10)
