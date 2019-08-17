@@ -24,8 +24,6 @@ class Profile(models.Model):
     address = models.CharField(max_length=100)
     address_keywords = models.ManyToManyField(Address)
 
-    # 더 추가될 수 있음
-
     def __str__(self):
         return "{}'s Profile".format(self.user)
 

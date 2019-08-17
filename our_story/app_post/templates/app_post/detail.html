@@ -16,7 +16,7 @@
             {% endif %}
             <sup> {{ post.heart.all|length }}</sup>
         </span>
-        <span class="mx-1"><i class="far fa-comment"></i><sup> {{ post.comment.all|length }}</sup></span>
+        <span class="mx-1"><i class="far fa-comment"></i><sup> {{ post.comment_set.all|length }}</sup></span>
         <div class="float-right">
             {% if user.is_authenticated %}
             <span class="mx-3 btn-remove cursor-pointer"><i class="far fa-trash-alt"></i></span>

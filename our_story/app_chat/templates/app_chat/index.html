@@ -1,24 +1,26 @@
 {% extends 'layout.html' %}
-
+{% load staticfiles %}
 {% block title %}<title>{{ user.profile.get_name }}'s 대화 목록</title>{% endblock %}
 
 {% block content %}
 <div class="border rounded p-3 friend-list">
     <span>대화 목록</span>
     <hr class="mt-0">
-    {% for x in user.profile.friend.all %}
-    <input type="hidden" class="username" value="{{ x.user.username }}" readonly>
+    {% for x in message_list %}
     <div class="border-bottom">
         <div class="rounded p-2">
             <div class="d-flex flex-wrap">
-                <div class="flex-fill"><img src="{{ x.picture.url }}" class="profile-picture"></div>
-                <div class="flex-fill my-auto"><div class="pl-3"><a href="{% url 'app_user:profile' x.user.username %}" class="user-name">{{ x.get_name }} ({{x.sex}})<br>{{ x.birth }}</a></div></div>
-                <div class="flex-fill my-auto text-right"><span class="pr-3">
-                    {% for xx in user.message_box_user.all %}
-                        {% if xx.friend.profile == x %}{{ xx.message.last }}{% endif %}
-                    {% endfor %}
-                </span></div>
-                <a class="btn my-auto ml-auto btn-chatting-start border bg-main-2 text-light">1:1 대화</a>
+                <div class=""><img src="{% if x.user.profile.picture %}{{ x.user.profile.picture.url }}{% else %}{% static 'assets/no_pic.png' %}{% endif %}" class="profile-picture rounded"></div>
+                <div class="flex-fill my-auto"><div class="pl-3"><a href="{% url 'app_user:profile' x.user.username %}" class="user-name">{{ x.user.profile.get_name }} ({{x.user.profile.sex}})<br>{{ x.user.profile.birth }}</a></div></div>
+                <div class="flex-fill my-auto text-right">
+                    <span class="pr-3">
+                        <span id="chat-index-last_message">{{ x.last_message }}</span>
+                        <small class="{% if x.unread != 0 %}bg-danger py-auto p-1 {% endif %} text-white rounded" id="chat-index-unread">
+                            {% if x.unread != 0 %}{{ x.unread }}{% endif %}
+                        </small>
+                    </span>
+                </div>
+                <a class="btn my-auto ml-auto btn-chatting-start border bg-main-2 text-light">1:1 대화<span id="{{ x.user.username }}" hidden>{{ x.user.username }}</span></a>
             </div>
         </div>
     </div>

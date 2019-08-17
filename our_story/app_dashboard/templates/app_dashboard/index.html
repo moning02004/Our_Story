@@ -13,6 +13,22 @@
                 <button type="submit" class="input-group-text cursor-pointer">작성</button>
             </div>
         </div>
+        <div class="collapse" id="option">
+            <div class="input-group">
+                <div class="input-group-append">
+                    <label class="input-group-text">태그</label>
+                </div>
+                <input type="text" class="form-control" placeholder="태그 입력">
+            </div>
+            <div class="input-group">
+                <div class="input-group-append">
+                    <label class="input-group-text" for="post-image">사진</label>
+                    <input type="file" hidden id="post-image" name="image" accept="image/*" multiple>
+                </div>
+                <div class="form-control" id="post-image-text">이미지를 추가해주세요</div>
+            </div>
+        </div>
+        <button type="button" class="btn w-100 text-center" id="btn-option" data-toggle="collapse" data-target="#option" >옵션 <i class="fas fa-chevron-down"></i></button>
     </div>
 </form>
 <div class="post-list"><hr></div>

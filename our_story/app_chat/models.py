@@ -17,6 +17,7 @@ class MessageBox(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_box_user')
     message = models.ManyToManyField(Message)
     friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_box_friend')
+    last_time = models.DateTimeField()
 
     def __str__(self):
         return '{} <--> {}'.format(self.user.username, self.friend.username)

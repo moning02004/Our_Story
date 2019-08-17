@@ -31,7 +31,6 @@ $(document).ready(function() {
     });
 
     $('.btn-comment').click(function() {
-        if (!confirm('작성하시겠습니까?')) return false;
         var $pk = $('#pk').text();
         var $content = $('input[name="content"]');
         $.ajax({
@@ -48,12 +47,30 @@ $(document).ready(function() {
                 $layout.find('#author').html(data['author']);
                 $layout.find('#content').html(data['content']);
                 $layout.find('#created').html(data['created']);
-                console.log($layout.html())
                 $content.val('');
                 var $field = $('#comment-field');
                 $field.prepend($layout.html());
 
             }
         });
+    });
+
+    $('#btn-option').click(function() {
+        $(this).find('i').toggleClass('fa-chevron-down');
+        $(this).find('i').toggleClass('fa-chevron-up');
+    });
+
+    $('#post-image-text').click(function() {
+        $('#post-image').click();
+    });
+    $('#post-image').change(function() {
+        if ($(this).get(0).files.length <= 0) return false;
+
+        var files = [];
+        for (var i=0; i < $(this).get(0).files.length; i++){
+            console.log($(this).get(0).files[i].name);
+            files.push($(this).get(0).files[i].name);
+        }
+        $('#post-image-text').html(files.join(", "));
     });
 });

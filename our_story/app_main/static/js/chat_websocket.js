@@ -39,6 +39,6 @@ $(function() {
         chat_websocket.send(JSON.stringify({
             'content': $content.val(),
         }))
-        $content.val('');
+        $content.val('').focus();
     });
 })

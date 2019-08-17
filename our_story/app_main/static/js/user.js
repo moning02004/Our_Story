@@ -1,50 +1,35 @@
 $(document).ready(function() {
     // register
-    var $birth = $('#birth');
-    $('form#register').submit(function() {
-        var address_regex = /[가-힣]/g;
+    var username_regex = /[0-9a-zA-Z]/g;
 
+    $('input[value="가입"]').click(function() {
+        var address_regex = /[가-힣]/g;
         var bName = ($('input[name="fname"]').val() != '' && $('input[name="lname"]').val() != '');
         var bUsername = $('#check-username > i').hasClass('fa-check');
         var bPassword = $('#check-password > i').hasClass('fa-check');
         var bPassword2 = $('#check-password2 > i').hasClass('fa-check');
         var bAddress = address_regex.test($('input[name="address"]').val());
         var bSex = $('input[name="sex"]').is(':checked');
+        var $birth = $('#birth');
 
         if (bName && bUsername && bPassword && bPassword2 && bAddress && bSex) {
-            return true;
+            $('form#register').submit()
+            return false;
         }
         alert("Check the information");
         return false;
-    });
-
-
-    $birth.datepicker({
-        dateFormat: 'yy-mm-dd',
-        yearRange: '1980:',
-        changeMonth: true,
-        changeYear: true,
-        prevText: '이전 달',
-        nextText: '다음 달',
-        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-        monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-        dayNames: ['일', '월', '화', '수', '목', '금', '토'],
-        dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-        dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
-        showMonthAfterYear: true,
-        yearSuffix: '년'
-    });
-    $birth.keyup(function() {
-        $(this).val('');
     })
-
 
     // check username
     var $check_username = $('#check-username');
     var $origin_check = $check_username.html();
     $check_username.click(function() {
         var $username = $('#username').val();
-        if ($username === '') return false;
+        if ($username === '' || !username_regex.test($username)) {
+            alert('영어로 입력되어 있는지, 빈칸인지 확인해주십시오.');
+            $('#username').focus();
+            return false;
+        }
         $.ajax({
             url: '/user/check_username/',
             data: {'username': $username},

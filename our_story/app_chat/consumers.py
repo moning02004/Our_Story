@@ -1,8 +1,9 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 
+from datetime import datetime
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Sum
 
 from .models import MessageBox, Message
 
@@ -24,7 +25,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-        self.__member_list.append(self.me)
+        self.__member_list.append(self.me) if not self.me in self.__member_list else None
         self.__channels_list[self.participant] = self.__member_list
 
         await self.accept()
@@ -37,19 +38,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
             })
 
     async def disconnect(self, close_code):
-
         # Leave room group
         await self.channel_layer.group_discard(
             self.participant,
             self.channel_name
         )
-        self.__channels_list[self.participant].remove(self.me)
+        try:
+            self.__channels_list[self.participant].remove(self.me)
+        except:
+            pass
 
-    # 웹소켓이 처음에 보내는 메시지를 여기서 받는다. 그래서 receive구만
-    # type은 함수 이름으로 어떤 함수로 보낼지 제어할 수 있다.
     async def receive(self, text_data):
         left = len(self.__channels_list[self.participant]) == 1
-        print(left)
+
         text_data_json = json.loads(text_data)
         user = User.objects.get(username=self.me)
         friend = User.objects.get(username=self.friend)
@@ -61,15 +62,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
         if not left:
             message.unread = 0
+            message.save()
 
-        query = Q(user=user) & Q(friend=friend)
-        message_box = MessageBox.objects.get(query) if MessageBox.objects.filter(query).exists() else MessageBox.objects.create(user=user, friend=friend)
-        message_box.message.add(message)
+        for x, y in [[user, friend], [friend, user]]:
+            query = Q(user=x) & Q(friend=y)
+            message_box = MessageBox.objects.get(query)
+            message_box.message.add(message)
+            message_box.last_time = message.created
 
-        query2 = Q(user=friend) & Q(friend=user)
-        message_box2 = MessageBox.objects.get(query2) if MessageBox.objects.filter(query2).exists() else MessageBox.objects.create(user=friend, friend=user)
-        message_box2.message.add(message)
-
+        message_box = MessageBox.objects.get(Q(user=friend) & Q(friend=user))
+        unread = message_box.message.all().filter(to_user=friend).aggregate(sum=Sum('unread'))['sum']
         await self.channel_layer.group_send(
             self.participant,
             {
@@ -79,6 +81,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'to_user': message.to_user.profile.get_name(),
                 'created': message.created.strftime('%H:%M'),
                 'left': left
+            }
+        )
+        await self.channel_layer.group_send(
+            self.friend,
+            {
+                'type': 'refresh',
+                'content': message.content,
+                'user': message.from_user.username,
+                'unread': unread
+            }
+        )
+        await self.channel_layer.group_send(
+            self.me,
+            {
+                'type': 'refresh',
+                'content': message.content,
+                'user': message.to_user.username,
+                'unread': 0
             }
         )
 
