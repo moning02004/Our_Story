@@ -1,2 +1,3 @@
 # Our_Story
-Like instagram and facebook
+
+페이스북과 비슷하게 만들어 본 프로젝트 (myblog)
