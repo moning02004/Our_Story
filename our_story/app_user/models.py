@@ -32,3 +32,14 @@ class Profile(models.Model):
 
     def filename(self):
         return os.path.basename(self.picture.name)
+
+
+class Notice(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notice_to_user')
+    content = models.TextField()
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notice_from_user')
+    created = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.content
+

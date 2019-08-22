@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 from django.contrib.auth.models import User
 from django.db.models import Q, Sum
 from django.http import HttpRequest, JsonResponse, Http404
@@ -13,14 +15,15 @@ def index(request):
 
     message_list = list()
     for message_box in request.user.message_box_user.all():
-        print(message_box.last_time)
         content = dict()
         content['user'] = message_box.friend
         content['unread'] = message_box.message.all().filter(to_user=request.user).aggregate(sum=Sum('unread'))['sum']
         content['unread'] = 0 if content['unread'] is None else content['unread']
         content['last_message'] = message_box.message.last().content
+        content['last_time'] = message_box.message.last().created
         message_list.append(content)
-    return render(request, 'app_chat/index.html', {'message_list': message_list})
+    message_list.sort(key=itemgetter('last_time'))
+    return render(request, 'app_chat/index.html', {'message_list': reversed(message_list)})
 
 
 def message(request, friend, me):
