@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
-{% load staticfiles %}
-{% block title %}<title>{{ user.profile.get_name }}'s 프로필</title>{% endblock %}
+
+{% block title %}<title>{{ user.name }}'s 프로필</title>{% endblock %}
 
 {% block content %}
 <div class="border rounded p-3 mx-auto friend-list mb-5">
@@ -8,29 +8,29 @@
         {% csrf_token %}
         <div class="form-group">
             <span>프로필 사진</span>
-            <div id="previewer" class="text-center my-2" hidden><img src="" width="100px" height="100px"></div>
-            <label for="profile-picture" class="btn border d-block bg-main-2 text-white">변경</label>
-            <input type="file" name="profile-picture" id="profile-picture" accept="image/*" hidden>
-            {% if user.profile.picture %}
-            <a href="{{ user.profile.picture.url }}" target="_blank">{{ user.profile.filename }}</a>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            <label for="lastName">이름</label>
-            <div class="d-flex">
-                <input id="lastName" type="text" class="form-control" name="lname" placeholder="ex) 홍" value="{{ user.last_name }}">
-                <input id="firstName" type="text" class="form-control" name="fname" placeholder="ex) 길동" value="{{ user.first_name }}">
+            <div class="text-center previewer">
+                {% if user.avatar %}
+                <img src="{{ user.avatar.url }}" width="100px" class="border p-1 mb-2">
+                {% endif %}
             </div>
+            <div class="text-center my-2 previewer" hidden><img src="" width="100px" height="100px"></div>
+            <label for="profile-picture" class="btn border d-block bg-main-2 text-white">변경</label>
+            <input type="file" name="profile-image" id="profile-picture" accept="image/*" hidden>
+        </div>
+
+        <div class="form-group">
+            <label for="name">이름</label>
+            <input id="name" type="text" class="form-control" name="name" placeholder="이름" value="{{ user.name }}">
         </div>
 
         <div class="form-group">
             <label for="address">거주지</label>
-            <input id="address" type="text" class="form-control" name="address" placeholder="ex) 경기 용인, 경기도 용인시 처인구 등" value="{{ user.profile.address }}">
+            <input id="address" type="text" class="form-control" name="address" placeholder="거주지" value="{{ user.address }}">
         </div>
 
         <div class="form-group">
-            <label for="birth">생년월일</label>
-            <input id="birth" type="date" class="form-control" name="birth" value="{{ user.profile.birth }}">
+            <label for="birth">생일 {{ user.birth | date:'Y-m-d'}}</label>
+            <input id="birth" type="date" class="form-control" name="birth" value="{{ user.birth | date:'Y-m-d'}}">
         </div>
 
         <div class="form-group">
@@ -39,10 +39,10 @@
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            {% if user.profile.sex == '남' %}
-                            <input id="male" type="radio" name="sex" value="남" checked>
+                            {% if user.gender == '남' %}
+                            <input id="male" type="radio" name="gender" value="남" checked>
                             {% else %}
-                            <input id="male" type="radio" name="sex" value="남">
+                            <input id="male" type="radio" name="gender" value="남">
                             {% endif %}
                         </div>
                     </div>
@@ -51,10 +51,10 @@
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            {% if user.profile.sex == '여' %}
-                            <input id="female" type="radio" name="sex" value="여" checked>
+                            {% if user.gender == '여' %}
+                            <input id="female" type="radio" name="gender" value="여" checked>
                             {% else %}
-                            <input id="female" type="radio" name="sex" value="여">
+                            <input id="female" type="radio" name="gender" value="여">
                             {% endif %}
                         </div>
                     </div>
@@ -63,8 +63,9 @@
             </div>
         </div>
         <hr>
+
         <div class="form-group">
-            <label for="password">* 비밀번호를 입력하십시오.</label>
+            <label for="password">* 비밀번호</label>
             <small></small>
             <div class="input-group">
                 <input id="password" type="password" class="form-control" name="password" placeholder="8자 이상 입력바랍니다.">
@@ -75,7 +76,7 @@
         </div>
 
         <div class="form-group">
-            <label for="password2">비밀번호를 다시 한 번 입력하십시오</label>
+            <label for="password2">비밀번호 확인</label>
             <div class="input-group">
                 <input id="password2" type="password" class="form-control" name="password" placeholder="8자 이상 입력바랍니다.">
                 <div class="input-group-append">
@@ -89,6 +90,7 @@
     </form>
 </div>
 
+{% load static %}
 <script src="{% static 'js/user_edit.js' %}"></script>
 <script src="{% static 'js/password.js' %}"></script>
 

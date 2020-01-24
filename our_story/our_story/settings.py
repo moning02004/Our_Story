@@ -31,8 +31,9 @@ SESSION_COOKIE_AGE = 60 * 20
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 
-# Application definition
+AUTH_USER_MODEL = 'app_user.User'
 
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third party
-    'channels',
 
     # local apps
     'app_user',
@@ -82,15 +82,15 @@ TEMPLATES = [
 ]
 
 # WSGI_APPLICATION = 'our_story.wsgi.application'
-ASGI_APPLICATION = 'our_story.routing.application'
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [('localhost', 6379)],
-        },
-    },
-}
+ASGI_APPLICATION = 'our_story.asgi.application'
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [('localhost', 6379)],
+#         },
+#     },
+# }
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

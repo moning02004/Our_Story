@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render
 
-from app_user.models import Profile, Address
+from app_user.models import User
 
 
 def recommend(request):

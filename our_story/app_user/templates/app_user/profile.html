@@ -1,45 +1,63 @@
 {% extends 'layout.html' %}
-{% load staticfiles %}
-{% block title %}<title>{{ user_.profile.get_name }}'s 프로필</title>{% endblock %}
+
+{% load static %}
+{% block title %}<title>{{ person.name }}의 프로필</title>{% endblock %}
 
 {% block content %}
 <div class="border rounded p-3 mx-auto friend-list">
     <div class="d-flex rounded p-2 border-bottom flex-wrap">
-        <div><img src="{% if user_.profile.picture %}{{ user_.profile.picture.url }}{% else %}{% static 'assets/no_pic.png' %}{% endif %}" class="profile-picture rounded"></div>
+        <div>
+            <img src="{% if person.avatar %}
+            {{ person.avatar.url }}
+            {% else %}
+            {% static 'assets/noimages.png' %}
+            {% endif %}"
+                 class="profile-picture rounded" />
+        </div>
         <div><div class="my-auto w-100 pl-3">
-            <span>{{user_.profile.get_name}} ({{ user_.profile.sex }})<br>{{ user_.profile.birth }}</span>
-            <span><br>{{ user_.profile.address }}</span>
+            <span>{{ person.name }} ({{ person.gender }})</span>
+            <span><br>{{ person.status }}</span>
         </div></div>
-        {% if user == user_ %}
-        <a href="{% url 'app_user:edit' %}" class="btn my-auto ml-auto border bg-main text-white">수정</a>
+        {% if user == person %}
+        <div class="my-auto ml-auto">
+            <a href="{% url 'app_user:edit' %}" class="block btn border bg-main text-white">수정</a>
+            <a class="block btn border bg-main text-white">상태 메시지</a>
+        </div>
         {% else %}
         <div class="my-auto ml-auto">
-            {% if not user_.profile in user.profile.friend.all %}
-            <button class="btn ml-auto btn-add" value="{{ user_.username }}">친구 신청</button>
-            {% elif  user_.profile in user.profile.friend.all %}
-            <button class="btn ml-auto btn-release" value="{{ user_.username }}">친구 해제</button>
+            {% if not person in user.friend.all %}
+            <button class="btn ml-auto btn-add" value="{{ person.username }}">친구 신청</button>
+            {% else %}
+            <button class="btn ml-auto btn-release" value="{{ person.username }}">친구 해제</button>
             {% endif %}
-            <a class="btn my-auto ml-auto btn-chatting-start border bg-main-2 text-light">1:1 대화<span id="{{ user_.username }}" hidden></span></a>
+            <a class="btn my-auto ml-auto btn-chatting-start border bg-main-2 text-light">1:1 대화<span id="{{ person.username }}" hidden></span></a>
         </div>
         {% endif %}
     </div>
 </div>
 
 <div class="mt-3 border rounded p-3 friend-list">
-    <span>친구 목록 ({{ user_.profile.friend.all |length }})</span>
+    <span>친구 목록 ({{ person.friend.all |length }})</span>
     <hr class="mt-0">
     <p class="text-center"><a href="{% url 'app_friend:recommend' %}">다음</a>을 눌러 친구를 찾아보세요</p>
-    {% for x in user_.profile.friend.all %}
+    {% for x in person.friend.all %}
     <div class="border-bottom">
         <div class="d-flex rounded p-2 flex-wrap">
-            <div class="my-auto"><img src="{% if x.picture %}{{ x.picture.url }}{% else %}{% static 'assets/no_pic.png' %}{% endif %}" class="profile-picture rounded"></div>
-            <div class="flex-fill my-auto"><div class="w-100 pl-3"><a href="{% url 'app_user:profile' x.user.username%}" class="user-name">{{ x.get_name }} ({{ x.sex }})<br>{{ x.birth }}</a></div></div>
+            <div class="my-auto">
+                <img src="{% if x.avatar %}
+                    {{ x.avatar.url }}
+                {% else %}
+                    {% static 'assets/noimages.png' %}
+                {% endif %}"
+                     class="profile-picture rounded">
+            </div>
+            <div class="flex-fill my-auto"><div class="w-100 pl-3"><a href="{% url 'app_user:profile' x.username%}" class="user-name">{{ x.get_name }} ({{ x.sex }})<br>{{ x.birth }}</a></div></div>
             <div class="my-auto ml-auto">
                 {% if x.user != user %}
-                    {% if not x in user.profile.friend.all %}
-                    <button class="btn ml-auto btn-add" value="{{ x.user.username }}">친구 신청</button>
-                    {% elif  x in user.profile.friend.all %}
-                    <button class="btn ml-auto btn-release" value="{{ x.user.username }}">친구 해제</button>
+                    {% if not x in user.friend.all %}
+                    <button class="btn ml-auto btn-add" value="{{ x.username }}">친구 신청</button>
+                    {% elif  x in user.friend.all %}
+                    <button class="btn ml-auto btn-release" value="{{ x.username }}">친구 해제</button>
                     {% endif %}
                 {% endif %}
             </div>

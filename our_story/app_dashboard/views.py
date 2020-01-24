@@ -11,7 +11,7 @@ def index(request):
         return redirect('app_main:index')
 
     query = Q(author=request.user)
-    for x in request.user.profile.friend.all():
-        query.add(Q(author=x.user), query.OR)
+    for x in request.user.friend.all():
+        query.add(Q(author=x), query.OR)
     post_list = Post.objects.filter(query).order_by('created')
     return render(request, 'app_dashboard/index.html', {'post_list': reversed(post_list)})

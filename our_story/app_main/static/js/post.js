@@ -1,7 +1,8 @@
 $(document).ready(function() {
     $('.heart').click(function() {
-        console.log($(this).find('span').text());
-        var $pk = $(this).find('span').text();
+        let $origin = $(this);
+        let $pk = $(this).parent().attr('id');
+
         $.ajax({
             url: '/post/heart/',
             data: {'pk': $pk},
@@ -9,7 +10,12 @@ $(document).ready(function() {
             type: 'POST',
             success: function(data){
                 if (data['message'] == 'OK'){
-                    location.reload();
+                    $origin.children('i').toggleClass('text-danger');
+                    $origin.children('i').toggleClass('fas');
+                    $origin.children('i').toggleClass('far');
+                    number = Number($origin.children('sup').text());
+                    number += ($origin.children('i').hasClass('fas')) ? 1 : -1;
+                    $origin.children('sup').text(number);
                 }
             }
         });
@@ -17,15 +23,19 @@ $(document).ready(function() {
 
     $('.btn-remove').click(function() {
         if (!confirm('삭제하시겠습니까?')) return false;
-        var $pk = $('#pk').text();
+
+        let $pk = $(this).parent().parent().attr('id');
+        console.log($pk);
         $.ajax({
             url: '/post/remove/',
             data: {'pk': $pk},
             dataType: 'json',
             type: 'POST',
             success: function(data) {
-                if (data['message'] === "OK") location.replace('/dashboard/');
-
+                if (data['message'] === "OK") {
+                    console.log("dadsf")
+                    location.replace('/dashboard/');
+                }
             }
         });
     });

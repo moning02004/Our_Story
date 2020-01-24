@@ -1,14 +1,15 @@
 {% extends 'layout.html' %}
 
-{% block title %}<title>{{ user.profile.get_name }}님 반갑습니다.</title>{% endblock %}
+{% block title %}<title>{{ post.author.name }}의 게시글</title>{% endblock %}
 
 {% block content %}
 <div class="card mb-3">
-    <div class="card-header p-2 bg-main-2 rounded">{{ post.author.profile.get_name }} 님의 게시글입니다. <span class="float-right">2019-08-02</span></div>
-    <div class="card-body pre-box">{{ post.content }}</div>
-    <div class="card-footer p-2">
+    <div class="card-header p-2 bg-main-2 rounded">{{ post.author.name }} 님의 게시글입니다. <span class="float-right">2019-08-02</span></div>
+    <div class="card-body pre-box">
+        {{ post.content }}
+    </div>
+    <div class="card-footer p-2" id="{{ post.id }}">
          <span class="mx-1 cursor-pointer heart">
-            <span id="pk" hidden>{{ post.id }}</span>
             {% if user in post.heart_list %}
             <i class="fas fa-heart text-danger"></i>
             {% else %}
@@ -18,10 +19,9 @@
         </span>
         <span class="mx-1"><i class="far fa-comment"></i><sup> {{ post.comment_set.all|length }}</sup></span>
         <div class="float-right">
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and user == post.author %}
             <span class="mx-3 btn-remove cursor-pointer"><i class="far fa-trash-alt"></i></span>
             {% endif %}
-            <a href="{% url 'app_dashboard:index' %}" class="mx-1 text-dark"><i class="fas fa-undo"></i></a>
         </div>
     </div>
 </div>
@@ -53,6 +53,6 @@
     </div>
 </div>
 
-{% load staticfiles %}
+{% load static %}
 <script src="{% static 'js/post.js' %}"></script>
 {% endblock %}

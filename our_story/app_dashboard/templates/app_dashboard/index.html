@@ -1,12 +1,12 @@
 {% extends 'layout.html' %}
 
-{% block title %}<title>{{ user.profile.get_name }}님 반갑습니다.</title>{% endblock %}
+{% block title %}<title>{{ user.name }}님 반갑습니다.</title>{% endblock %}
 
 {% block content %}
 <form action="{% url 'app_post:new' %}" method="post">
     {% csrf_token %}
     <div class="post-list">
-        <div class="card-header p-2 bg-main-2 rounded">{{ user.profile.get_name }} 님! 글을 작성해보세요~</div>
+        <div class="card-header p-2 bg-main-2 rounded">{{ user.name }} 님. 글을 작성해보세요~</div>
         <div class="input-group">
             <textarea class="form-control textarea-box" name="content"></textarea>
             <div class="input-group-append">
@@ -18,7 +18,7 @@
                 <div class="input-group-append">
                     <label class="input-group-text">태그</label>
                 </div>
-                <input type="text" class="form-control" placeholder="태그 입력">
+                <input type="text" class="form-control" name="tag" placeholder="태그 입력">
             </div>
             <div class="input-group">
                 <div class="input-group-append">
@@ -32,13 +32,13 @@
     </div>
 </form>
 <div class="post-list"><hr></div>
+
 {% for post in post_list %}
 <div class="card mb-5 post-list">
-    <div class="card-header p-2 bg-main-2 rounded"><a href="{% url 'app_user:profile' post.author.username %}" class="text-dark user-name">{{ post.author.profile.get_name }} </a>님의 게시글입니다.</div>
+    <div class="card-header p-2 bg-main-2 rounded"><a href="{% url 'app_user:profile' post.author.username %}" class="text-dark user-name">{{ post.author.get_name }} </a>님의 게시글입니다.</div>
     <a href="{% url 'app_post:detail' post.id %}" class="card-body cursor-pointer content-box text-dark">{{ post.content }}</a>
-    <div class="card-footer p-1">
+    <div class="card-footer p-1" id="{{ post.id }}">
         <span class="mx-1 cursor-pointer heart">
-            <span hidden>{{ post.id }}</span>
             {% if user in post.heart_list %}
             <i class="fas fa-heart text-danger"></i>
             {% else %}
@@ -54,6 +54,6 @@
 {% endfor %}
 
 
-{% load staticfiles %}
+{% load static %}
 <script src="{% static 'js/post.js' %}"></script>
 {% endblock %}

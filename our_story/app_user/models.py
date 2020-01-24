@@ -1,45 +1,35 @@
 import os
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 def file_path(instance, filename):
-    return 'profile_picture/{}/{}'.format(instance.user.username, filename)
+    return 'avatar/{}/{}'.format(instance.username, filename)
 
 
-class Address(models.Model):
-    keyword = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.keyword
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    picture = models.ImageField(upload_to=file_path, null=True, blank=True)
+class User(AbstractUser):
+    name = models.CharField(max_length=100)
+    avatar = models.ImageField(upload_to=file_path, null=True, blank=True)
+    tel = models.CharField(max_length=13)
+    gender = models.CharField(max_length=10, null=True, blank=True)
+    birth = models.DateTimeField(null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True, default='')
+    status = models.CharField(max_length=150, default='')
     friend = models.ManyToManyField('self')
-    birth = models.CharField(max_length=12, default='')
-    sex = models.CharField(max_length=10)
-    address = models.CharField(max_length=100)
-    address_keywords = models.ManyToManyField(Address)
 
     def __str__(self):
-        return "{}'s Profile".format(self.user)
-
-    def get_name(self):
-        return self.user.last_name + self.user.first_name
+        return "{}'s Profile".format(self.name)
 
     def filename(self):
-        return os.path.basename(self.picture.name)
+        return os.path.basename(self.avatar.name)
 
 
 class Notice(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notice_to_user')
-    content = models.TextField()
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notice_from_user')
+    content = models.TextField()
     created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.content
-

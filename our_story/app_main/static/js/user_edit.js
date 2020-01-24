@@ -7,8 +7,11 @@ $(document).ready(function() {
         readURL(this);
     });
 
+    let $previewer = $('.previewer');
+    $previewer.click(function() {
+        window.open($previewer.find('img').attr('src'), '_blank');
+    });
     function readURL(input) {
-        var $previewer = $('#previewer');
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
@@ -18,5 +21,4 @@ $(document).ready(function() {
             reader.readAsDataURL(input.files[0]);
         }
     }
-
 });
