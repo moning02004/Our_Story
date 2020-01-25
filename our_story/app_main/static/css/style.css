@@ -40,7 +40,7 @@ a:hover{
 }
 .pre-box {
     font-size: 1rem;
-    line-height: 2rem;
+    line-height: 1rem;
     white-space: pre-wrap;
     white-space: -moz-pre-wrap;
     white-space: -o-pre-wrap;
@@ -67,7 +67,8 @@ a:hover{
 #search-bar{
     display: inline;
 }
-@media only screen and (max-width: 800px) {
+
+@media only screen and (max-width: 1000px) {
     .friend-list, .post-list {
         width: 100%;
     }
@@ -77,5 +78,8 @@ a:hover{
     #btn-search {
         display: inline-block;
     }
-
+    .btn-friend {
+        margin-top: 0.5rem;
+        width: 100% !important;
+    }
 }

@@ -58,14 +58,22 @@ def profile(request, username):
     return render(request, 'app_user/profile.html', {'person': User.objects.get(username=username)})
 
 
+def status(request):
+    if request.is_ajax() and request.method == 'POST':
+        request.user.status = request.POST.get('status')
+        request.user.save()
+        return HttpResponse(request.user.status, status=HTTPStatus.OK)
+    raise Http404
+
+
 def check_username(request):
     if request.is_ajax() and request.method == 'POST':
         username = request.POST.get('username')
         try:
             User.objects.all().get(username=username)
-            return HttpResponse(HTTPStatus.BAD_REQUEST)
+            return HttpResponse(status=HTTPStatus.BAD_REQUEST)
         except:
-            return HttpResponse(HTTPStatus.OK)
+            return HttpResponse(status=HTTPStatus.OK)
     raise Http404
 
 

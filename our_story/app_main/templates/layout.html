@@ -6,9 +6,9 @@
     <a class="nav-link text-white" href="{% url 'app_main:index' %}">Dashboard</a>
     <button class="btn" id="btn-search"><i class="fa fa-search text-white"></i></button>
     <div id="search-bar">
-        <form action="#" method="get">
+        <form action="/friend/search" method="get">
             <div class="input-group">
-                <input type="search" class="form-control" name="search_keyword">
+                <input type="search" class="form-control" name="keyword">
                 <div class="input-group-append">
                     <button class="btn"><i class="fa fa-search"></i></button>
                 </div>
@@ -30,7 +30,7 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item" href="{% url 'app_user:profile' user.username %}">내 정보</a>
-            <a class="dropdown-item" href="{% url 'app_friend:recommend' %}">친구 추천</a>
+            <a class="dropdown-item" href="{% url 'app_friend:index' %}">친구 찾기</a>
             <a class="dropdown-item" href="{% url 'app_chat:index' %}">대화 목록</a>
             <a class="dropdown-item" href="#">설정</a>
             <a class="dropdown-item pointer-cursor" id="logout">로그아웃</a>

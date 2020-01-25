@@ -4,12 +4,12 @@ $(document).ready(function() {
         $.ajax({
             url: '/friend/add/',
             data: {'username': $(this).val()},
-            dataType: 'json',
             type: 'POST',
             success: function(data) {
-                if (data['message'] == 'OK') {
-                    location.reload();
-                }
+                location.reload();
+            },
+            error: function() {
+                alert('에러가 발생했습니다.');
             }
         })
     });
@@ -19,12 +19,12 @@ $(document).ready(function() {
         $.ajax({
             url: '/friend/release/',
             data: {'username': $(this).val()},
-            dataType: 'json',
             type: 'POST',
             success: function(data) {
-                if (data['message'] == 'OK') {
-                    location.reload();
-                }
+                location.reload();
+            },
+            error: function() {
+                alert('에러가 발생했습니다.');
             }
         })
     });

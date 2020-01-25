@@ -6,17 +6,17 @@ $(document).ready(function() {
         $.ajax({
             url: '/post/heart/',
             data: {'pk': $pk},
-            dataType: 'json',
             type: 'POST',
             success: function(data){
-                if (data['message'] == 'OK'){
-                    $origin.children('i').toggleClass('text-danger');
-                    $origin.children('i').toggleClass('fas');
-                    $origin.children('i').toggleClass('far');
-                    number = Number($origin.children('sup').text());
-                    number += ($origin.children('i').hasClass('fas')) ? 1 : -1;
-                    $origin.children('sup').text(number);
-                }
+                $origin.children('i').toggleClass('text-danger');
+                $origin.children('i').toggleClass('fas');
+                $origin.children('i').toggleClass('far');
+                number = Number($origin.children('sup').text());
+                number += ($origin.children('i').hasClass('fas')) ? 1 : -1;
+                $origin.children('sup').text(number);
+            },
+            error: function() {
+                alert('에러발생');
             }
         });
     });
@@ -29,13 +29,12 @@ $(document).ready(function() {
         $.ajax({
             url: '/post/remove/',
             data: {'pk': $pk},
-            dataType: 'json',
             type: 'POST',
             success: function(data) {
-                if (data['message'] === "OK") {
-                    console.log("dadsf")
-                    location.replace('/dashboard/');
-                }
+                location.replace('/dashboard/');
+            },
+            error: function() {
+                alert('에러발생');
             }
         });
     });

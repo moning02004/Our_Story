@@ -1,31 +1,46 @@
+from http import HTTPStatus
+
 from django.contrib.auth.models import User
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse, HttpRequest
+from django.shortcuts import render, redirect
 
 from app_user.models import User
 
+from .models import MaybeKnow
 
-def recommend(request):
-    rec_friend_list = []
-    for x in request.user.profile.address_keywords.all():
-        for profile in Address.objects.get(keyword=x.keyword).profile_set.all():
-            rec_friend_list.append(profile) if profile not in rec_friend_list and profile != request.user.profile else None
 
-    print(rec_friend_list)
-    return render(request, 'app_friend/recommend.html', {'recommended_friend_list': rec_friend_list})
+def index(request):
+    assert isinstance(request, HttpRequest)
+    if not request.user.is_authenticated:
+        return redirect('app_main:index')
+
+    user = User.objects.prefetch_related('friend').get(username=request.user.username)
+    people = user.maybe.all()
+    return render(request, 'app_friend/index.html', {'people': people})
 
 
 def add(request):
     if request.is_ajax() and request.method == 'POST':
-        target = Profile.objects.get(user=User.objects.get(username=request.POST.get('username')))
-        request.user.profile.friend.add(target) if target not in request.user.profile.friend.all() else None
-        return JsonResponse({'message':'OK'})
-    return JsonResponse({'message':'NO'})
+        friend = User.objects.get(username=request.POST.get('username'))
+        request.user.friend.add(friend)
+        if not MaybeKnow.objects.filter(user=request.user, someone=friend).exists():
+            MaybeKnow.objects.create(user=request.user, someone=friend)
+        return HttpResponse(status=HTTPStatus.OK)
+    return HttpResponse(status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 def release(request):
     if request.is_ajax() and request.method == 'POST':
-        target = Profile.objects.get(user=User.objects.get(username=request.POST.get('username')))
-        request.user.profile.friend.remove(target) if target in request.user.profile.friend.all() else None
-        return JsonResponse({'message':'OK'})
-    return JsonResponse({'message': 'NO'})
+        try:
+            friend = User.objects.get(username=request.POST.get('username'))
+            request.user.friend.remove(friend)
+            return HttpResponse(status=HTTPStatus.OK)
+        except:
+            pass
+    return HttpResponse(status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+def search(request):
+    keyword = request.GET.get('keyword')
+    people = User.objects.filter(name=keyword).exclude(username=request.user.username) if User.objects.filter(name=keyword).exists() else []
+    return render(request, 'app_friend/search.html', {'people': people})

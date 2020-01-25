@@ -15,17 +15,20 @@
                  class="profile-picture rounded" />
         </div>
         <div><div class="my-auto w-100 pl-3">
-            <span>{{ person.name }} ({{ person.gender }})</span>
-            <span><br>{{ person.status }}</span>
+            <span>{{ person.name }}</span>
+            <p id="status" class="small" style="color: green; padding-top: 0.25rem;">{{ person.status }}</p>
+            <div id="chg-input" style="display: none;">
+                <input type="text" class="form-control" name="status" value="{{ person.status }}" placeholder="상태 메시지를 입력하세요.">
+            </div>
         </div></div>
         {% if user == person %}
         <div class="my-auto ml-auto">
             <a href="{% url 'app_user:edit' %}" class="block btn border bg-main text-white">수정</a>
-            <a class="block btn border bg-main text-white">상태 메시지</a>
+            <button id="chg-status" class="block btn border bg-main text-white">상태 메시지</button>
         </div>
         {% else %}
         <div class="my-auto ml-auto">
-            {% if not person in user.friend.all %}
+            {% if person not in user.friend.all %}
             <button class="btn ml-auto btn-add" value="{{ person.username }}">친구 신청</button>
             {% else %}
             <button class="btn ml-auto btn-release" value="{{ person.username }}">친구 해제</button>
@@ -39,25 +42,28 @@
 <div class="mt-3 border rounded p-3 friend-list">
     <span>친구 목록 ({{ person.friend.all |length }})</span>
     <hr class="mt-0">
-    <p class="text-center"><a href="{% url 'app_friend:recommend' %}">다음</a>을 눌러 친구를 찾아보세요</p>
-    {% for x in person.friend.all %}
+    <p class="text-center"><a href="{% url 'app_friend:index' %}">다음</a>을 눌러 친구를 찾아보세요</p>
+    {% for friend in person.friend.all %}
     <div class="border-bottom">
         <div class="d-flex rounded p-2 flex-wrap">
             <div class="my-auto">
-                <img src="{% if x.avatar %}
-                    {{ x.avatar.url }}
+                <img src="{% if friend.avatar %}
+                    {{ friend.avatar.url }}
                 {% else %}
                     {% static 'assets/noimages.png' %}
                 {% endif %}"
                      class="profile-picture rounded">
             </div>
-            <div class="flex-fill my-auto"><div class="w-100 pl-3"><a href="{% url 'app_user:profile' x.username%}" class="user-name">{{ x.get_name }} ({{ x.sex }})<br>{{ x.birth }}</a></div></div>
-            <div class="my-auto ml-auto">
-                {% if x.user != user %}
-                    {% if not x in user.friend.all %}
-                    <button class="btn ml-auto btn-add" value="{{ x.username }}">친구 신청</button>
-                    {% elif  x in user.friend.all %}
-                    <button class="btn ml-auto btn-release" value="{{ x.username }}">친구 해제</button>
+            <div class="flex-fill my-auto pl-3 ">
+                <a href="{% url 'app_user:profile' friend.username %}" class="user-name">{{ friend.name }}</a>
+                <p class="small" style="color: green; padding-top: 0.25rem;">{{ friend.status }}</p>
+            </div>
+            <div class="btn-friend my-auto ml-auto">
+                {% if friend != user %}
+                    {% if not friend in user.friend.all %}
+                    <button class="btn ml-auto btn-add btn-friend" value="{{ friend.username }}">친구 신청</button>
+                    {% elif  friend in user.friend.all %}
+                    <button class="btn ml-auto btn-release btn-friend" value="{{ friend.username }}">친구 해제</button>
                     {% endif %}
                 {% endif %}
             </div>
@@ -66,6 +72,7 @@
     {% endfor %}
 </div>
 
+<script src="{% static 'js/user_edit.js' %}"></script>
 <script src="{% static 'js/friend.js' %}"></script>
 <script src="{% static 'js/chat.js' %}"></script>
 

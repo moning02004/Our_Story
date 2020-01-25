@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+{% block title %}<title>친구 찾기</title>{% endblock %}
+
+{% block content %}
+<div class="border rounded p-3 friend-list">
+    <span>{{ user.name }}님을 위한 추천</span>
+    <hr class="mt-0">
+    {% for person in people %}
+    <div class="border-bottom">
+        <div class="d-flex rounded p-2 flex-wrap">
+            <div class="my-auto">
+                <img src="{% if person.someone.avatar %}
+                    {{ person.someone.avatar.url }}
+                {% else %}
+                    {% static 'assets/noimages.png' %}
+                {% endif %}"
+                     class="profile-picture rounded">
+            </div>
+            <div class="flex-fill my-auto pl-3 ">
+                <a href="{% url 'app_user:profile' person.someone.username %}" class="user-name">{{ person.someone.name }}</a>
+                <p class="small" style="color: green;">{{ person.someone.status }}</p>
+            </div>
+            <div class="btn-friend my-auto ml-auto">
+                {% if person.someone not in user.friend.all %}
+                <button class="btn ml-auto btn-add btn-friend" value="{{ person.someone.username }}">친구 신청</button>
+                {% elif person.someone in user.friend.all %}
+                <button class="btn ml-auto btn-release btn-friend" value="{{ person.someone.username }}">친구 해제</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script src="{% static 'js/friend.js' %}"></script>
+{% endblock %}

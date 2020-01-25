@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+{% block title %}<title>검색</title> {% endblock %}
+
+{% block content %}
+<div class="border rounded p-3 friend-list">
+    {% for person in people %}
+    <div class="border-bottom">
+        <div class="d-flex rounded p-2">
+            <img src="{% if person.avatar %} {{ person.avatar.url }} {% else %} {% static 'assets/noimages.png' %} {% endif %}" class="profile-picture rounded">
+
+            <div class="flex-fill my-auto pl-3 ">
+                <span>{{ person.name }}</span>
+                <span><br>{{ person.status }}</span>
+            </div>
+            {% if person not in user.friend.all %}
+            <button class="btn my-auto ml-auto btn-add" value="{{ person.username }}">친구 신청</button>
+            {% else %}
+            <button class="btn my-auto ml-auto btn-release" value="{{ person.username }}">친구 해제</button>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="text-center">찾는 사람이 없습니다.</div>
+    {% endfor %}
+</div>
+
+<script src="{% static 'js/friend.js' %}"></script>
+{% endblock %}

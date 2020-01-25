@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
-{% load staticfiles %}
-{% block title %}<title>{{ user.profile.get_name }}'s 대화 목록</title>{% endblock %}
+{% load static %}
+{% block title %}<title>{{ user.name }}'s 대화 목록</title>{% endblock %}
 
 {% block content %}
 <div class="border rounded p-3 friend-list">
@@ -29,7 +29,6 @@
     {% endfor %}
 </div>
 
-{% load static %}
 <script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}
 
